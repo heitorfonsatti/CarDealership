@@ -1,4 +1,8 @@
 package com.cardealership.CarDealership.Car.DTO;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-public record CarRecordDTO() {
+import java.math.BigDecimal;
+
+public record CarRecordDTO(@NotBlank String brand, @NotBlank String model, @NotNull BigDecimal value) {
 }
