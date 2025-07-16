@@ -1,4 +1,6 @@
 package com.cardealership.CarDealership.Employee.DTO;
 
-public record EmployeeRecordDTO() {
+import jakarta.validation.constraints.NotBlank;
+
+public record EmployeeRecordDTO(@NotBlank String name) {
 }
