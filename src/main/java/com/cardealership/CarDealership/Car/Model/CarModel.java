@@ -1,5 +1,6 @@
 package com.cardealership.CarDealership.Car.Model;
 
+import com.cardealership.CarDealership.Buyer.Model.BuyerModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,4 +30,7 @@ public class CarModel extends RepresentationModel<CarModel> implements Serializa
     private String usage;
     private String accessories;
     private BigDecimal value;
+    @ManyToOne
+    @JoinColumn(name = "buyer_id")
+    private BuyerModel buyer;
 }

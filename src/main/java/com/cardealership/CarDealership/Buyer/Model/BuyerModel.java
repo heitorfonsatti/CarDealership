@@ -1,6 +1,8 @@
 package com.cardealership.CarDealership.Buyer.Model;
 
 
+import com.cardealership.CarDealership.Car.Model.CarModel;
+import com.cardealership.CarDealership.Employee.Model.EmployeeModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +12,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -30,6 +33,13 @@ public class BuyerModel extends RepresentationModel<BuyerModel> implements Seria
     private String location;
     private String email;
     private LocalDate dateOfBirth;
+
+    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
+    private List<CarModel> cars;
+
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private EmployeeModel employee;
 
     @Transient
     public int getAge() {
