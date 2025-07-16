@@ -1,8 +1,11 @@
 package com.cardealership.CarDealership.Car.Controller;
 
+import com.cardealership.CarDealership.Buyer.Model.BuyerModel;
+import com.cardealership.CarDealership.Buyer.Repository.BuyerRepository;
 import com.cardealership.CarDealership.Car.DTO.CarRecordDTO;
 import com.cardealership.CarDealership.Car.Model.CarModel;
 import com.cardealership.CarDealership.Car.Repository.CarRepository;
+import com.cardealership.CarDealership.Employee.Repository.EmployeeRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +26,20 @@ public class CarController {
     @Autowired
     CarRepository carRepository;
 
+    @Autowired
+    BuyerRepository buyerRepository;
+
     @PostMapping("/cars")
-    public ResponseEntity<CarModel> saveCar(@RequestBody @Valid CarRecordDTO carRecordDTO) {
+    public ResponseEntity<Object> saveCar(@RequestBody @Valid CarRecordDTO carRecordDTO) {
+        Optional<BuyerModel> buyer0 = buyerRepository.findById(carRecordDTO.buyerId());
+        if (buyer0.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Buyer not found");
+        }
+
         var carModel = new CarModel();
         BeanUtils.copyProperties(carRecordDTO, carModel);
+        carModel.setBuyer(buyer0.get());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(carRepository.save(carModel));
     }
 

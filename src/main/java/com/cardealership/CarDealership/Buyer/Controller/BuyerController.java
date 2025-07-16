@@ -3,6 +3,8 @@ package com.cardealership.CarDealership.Buyer.Controller;
 import com.cardealership.CarDealership.Buyer.DTO.BuyerRecordDTO;
 import com.cardealership.CarDealership.Buyer.Model.BuyerModel;
 import com.cardealership.CarDealership.Buyer.Repository.BuyerRepository;
+import com.cardealership.CarDealership.Employee.Model.EmployeeModel;
+import com.cardealership.CarDealership.Employee.Repository.EmployeeRepository;
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.beans.BeanUtils;
@@ -23,11 +25,20 @@ public class BuyerController {
 
     @Autowired
     BuyerRepository buyerRepository;
+    @Autowired
+    EmployeeRepository employeeRepository;
 
     @PostMapping("/buyer")
-    public ResponseEntity<BuyerModel> saveBuyer(@RequestBody @Valid BuyerRecordDTO buyerRecordDTO) {
+    public ResponseEntity<Object> saveBuyer(@RequestBody @Valid BuyerRecordDTO buyerRecordDTO) {
+        Optional<EmployeeModel> employee0 = employeeRepository.findById(buyerRecordDTO.employeeId());
+        if (employee0.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee not found");
+        }
+
         var buyerModel = new BuyerModel();
         BeanUtils.copyProperties(buyerRecordDTO, buyerModel);
+        buyerModel.setEmployee(employee0.get()); // associar o funcionário
+
         return ResponseEntity.status(HttpStatus.CREATED).body(buyerRepository.save(buyerModel));
     }
 
