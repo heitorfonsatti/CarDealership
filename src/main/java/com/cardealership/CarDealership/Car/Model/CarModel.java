@@ -1,6 +1,7 @@
 package com.cardealership.CarDealership.Car.Model;
 
 import com.cardealership.CarDealership.Buyer.Model.BuyerModel;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +31,9 @@ public class CarModel extends RepresentationModel<CarModel> implements Serializa
     private String usage;
     private String accessories;
     private BigDecimal value;
+
     @ManyToOne
     @JoinColumn(name = "buyer_id")
+    @JsonBackReference  // Complementa o @JsonManagedReference do Buyer
     private BuyerModel buyer;
 }

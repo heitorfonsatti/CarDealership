@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,6 +42,10 @@ public class BuyerModel extends RepresentationModel<BuyerModel> implements Seria
     @JoinColumn(name = "employee_id")
     @JsonBackReference
     private EmployeeModel employee;
+
+    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference  // Controle de serialização, resolve o loop
+    private List<CarModel> cars = new ArrayList<>();
 
     @Transient
     public int getAge() {
