@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
@@ -34,11 +37,9 @@ public class BuyerModel extends RepresentationModel<BuyerModel> implements Seria
     private String email;
     private LocalDate dateOfBirth;
 
-    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
-    private List<CarModel> cars;
-
     @ManyToOne
     @JoinColumn(name = "employee_id")
+    @JsonBackReference
     private EmployeeModel employee;
 
     @Transient
